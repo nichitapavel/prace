@@ -19,10 +19,14 @@ double pi(int n) {
 }
 
 int main(const int argc, const char** argv) {
-	int n_list[N_ARRAY] = {1, 2, 10, 50, 100, 500, INT_MAX};
-	for (int i = 0; i < N_ARRAY; ++i) {
-		double pi_r = pi(n_list[i]);
-		printf("[N: %d] - [pi_N: %.16lf] - [err(pi): %.16lf]\n", n_list[i], pi_r, pi_r - M_PI);
-	}
+	double err_n_min = pow(10, -6);
+	int n = 0;
+	double pi_r = 0.0;
+	do {
+		n++;
+		pi_r = pi(n);
+	} while (err_n_min < pi_r - M_PI);
+
+	printf("[N: %d] - [pi_N: %.16lf] - [err(pi): %.16lf]\n", n, pi_r, pi_r - M_PI);
 	return 0;
 }
