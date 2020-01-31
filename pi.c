@@ -20,20 +20,31 @@ double pi(int n) {
 
 int main(const int argc, const char** argv) {
 	double err_n_min = pow(10, -6);
-	int n = 1, n_prev;
-	double pi_r = 0.0;
+	int n = 1, n_min = 0, n_max = 0;
+	double pi_r = 0.0, err_n = 0.0;
 	do {
 		pi_r = pi(n);
-		double err_n = pi_r - M_PI;
+		err_n = pi_r - M_PI;
 		if (err_n_min < err_n) {
-			n_prev = n;
+			n_min = n;
 			n *= 2;
+		} else {
+			n_max = n;
 		}
-		if (err_n_min > err_n) {
-			n = (n - n_prev) / 2 + n_prev;
-		}
-	} while (1);
+	} while (n_max == 0);
 
-	printf("[N: %d] - [pi_N: %.16lf] - [err(pi): %.16lf]\n", n, pi_r, pi_r - M_PI);
+	while (n_max - n_min != 1) {
+		int n_tmp = n_min + (n_max - n_min) / 2;
+		pi_r = pi(n_tmp);
+		err_n = pi_r - M_PI;
+		if (err_n_min < err_n) {
+			n_min = n_tmp;
+		} else {
+			n_max = n_tmp;
+		}
+
+	}
+
+	printf("[N: %d] - [pi_N: %.16lf] - [err(pi): %.16lf]\n", n_max, pi_r, pi_r - M_PI);
 	return 0;
 }
