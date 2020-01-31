@@ -20,12 +20,19 @@ double pi(int n) {
 
 int main(const int argc, const char** argv) {
 	double err_n_min = pow(10, -6);
-	int n = 0;
+	int n = 1, n_prev;
 	double pi_r = 0.0;
 	do {
-		n++;
 		pi_r = pi(n);
-	} while (err_n_min < pi_r - M_PI);
+		double err_n = pi_r - M_PI;
+		if (err_n_min < err_n) {
+			n_prev = n;
+			n *= 2;
+		}
+		if (err_n_min > err_n) {
+			n = (n - n_prev) / 2 + n_prev;
+		}
+	} while (1);
 
 	printf("[N: %d] - [pi_N: %.16lf] - [err(pi): %.16lf]\n", n, pi_r, pi_r - M_PI);
 	return 0;
