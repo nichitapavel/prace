@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <math.h>
+#include <time.h>
 
 #define N_ARRAY 7
 
@@ -18,33 +19,48 @@ double pi(int n) {
 	return 4.0 / n * pi;
 }
 
-int main(const int argc, const char** argv) {
-	double err_n_min = pow(10, -6);
-	int n = 1, n_min = 0, n_max = 0;
+void find_range(double err_n_min, int* n_min, int* n_max) {
 	double pi_r = 0.0, err_n = 0.0;
-	do {
-		pi_r = pi(n);
+	for (int i = 1; *n_max == 0; i *= 2) {
+		pi_r = pi(i);
 		err_n = pi_r - M_PI;
 		if (err_n_min < err_n) {
-			n_min = n;
-			n *= 2;
+			*n_min = i;
 		} else {
-			n_max = n;
+			*n_max = i;
 		}
-	} while (n_max == 0);
+	}
+}
 
+int find_n(double err_n_min, int n_min, int n_max, double *pi_r, double err_n) {
+	int n_tmp = 0;
 	while (n_max - n_min != 1) {
-		int n_tmp = n_min + (n_max - n_min) / 2;
-		pi_r = pi(n_tmp);
-		err_n = pi_r - M_PI;
+		n_tmp = n_min + (n_max - n_min) / 2;
+		*pi_r = pi(n_tmp);
+		err_n = *pi_r - M_PI;
 		if (err_n_min < err_n) {
 			n_min = n_tmp;
 		} else {
 			n_max = n_tmp;
 		}
-
 	}
+	return n_max;
+}
 
-	printf("[N: %d] - [pi_N: %.16lf] - [err(pi): %.16lf]\n", n_max, pi_r, pi_r - M_PI);
+int main(const int argc, const char** argv) {
+	double err_n_min = pow(10, -6);
+	int n = 1, n_min = 0, n_max = 0;
+	double pi_r = 0.0, err_n = 0.0;
+
+	clock_t start, end;
+	start = clock();
+	find_range(err_n_min, &n_min, &n_max);
+	n = find_n(err_n_min, n_min, n_max, &pi_r, err_n);
+	end = clock();
+
+	printf(
+			"[N: %d] - [pi_N: %.16lf] - [err(pi): %.16lf] - [time in sec: %.6f]\n",
+			n, pi_r, pi_r - M_PI, (float) (end - start)/CLOCKS_PER_SEC
+			);
 	return 0;
 }
