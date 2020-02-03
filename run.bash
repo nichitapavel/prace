@@ -40,12 +40,7 @@ done
 
 
 if [ -n "${COMPILE}" ]; then
-  for f in pi.e*; do
-    gcc -g -fopenmp ${f} -o prace-${f:0:5} -lm
-    gcc -fopenmp ${f} -o prace-${f:0:5}-ndb -lm
-    gcc -g ${f} -o prace-${f:0:5}-nomp -lm
-    gcc ${f} -o prace-${f:0:5}-ndb-nomp -lm
-  done
+  make all
 fi
 
 if [ -n "${RUN}" ]; then
