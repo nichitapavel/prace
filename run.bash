@@ -40,16 +40,22 @@ done
 
 
 if [ -n "${COMPILE}" ]; then
-  gcc -g -fopenmp pi.c -o prace-pi -lm
-  gcc -fopenmp pi.c -o prace-pi-ndb -lm
-  gcc -g pi.c -o prace-pi-nomp -lm
-  gcc pi.c -o prace-pi-ndb-nomp -lm
+  for f in pi.e*; do
+    gcc -g -fopenmp ${f} -o prace-${f:0:5} -lm
+    gcc -fopenmp ${f} -o prace-${f:0:5}-ndb -lm
+    gcc -g ${f} -o prace-${f:0:5}-nomp -lm
+    gcc ${f} -o prace-${f:0:5}-ndb-nomp -lm
+  done
 fi
 
 if [ -n "${RUN}" ]; then
-  for f in prace-pi prace-pi-ndb prace-pi-nomp prace-pi-ndb-nomp; do
+  for f in prace-pi.e1*; do
     echo $f
-      for i in $(seq 0 ${RUN}); do
+    ./$f
+  done
+  for f in prace-pi.e[2\|3]*; do
+    echo $f
+    for i in $(seq 0 ${RUN}); do
       echo -n "$i "; ./$f
     done
   done
