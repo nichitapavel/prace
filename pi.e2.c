@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <limits.h>
 #include <math.h>
 #include <time.h>
@@ -19,8 +21,37 @@ double pi(int n) {
 	return 4.0 / n * pi;
 }
 
-int main(const int argc, const char** argv) {
-	double err_n_min = pow(10, -6);
+int parse_args(const int argc, char** const argv, int* base, int* exp) {
+	int arg, set_base = 0, set_exp = 0;
+
+	while ((arg = getopt (argc, argv, "b:e:")) != -1) {
+		switch (arg) {
+		  case 'b':
+			*base = atoi(optarg);
+			set_base = 1;
+			break;
+		  case 'e':
+			*exp = atoi(optarg);
+			set_exp = 1;
+			break;
+		  default:
+			return -1;
+		  }
+	}
+
+	if( set_base ^ set_exp == 1) {
+		return -1;
+	}
+	return 0;
+}
+
+int main(const int argc, char** const argv) {
+	int base = 10, exp = -6;
+	if (parse_args(argc, argv, &base, &exp) == -1) {
+		printf("Set base and exponent... exiting\n");
+		return -1;
+	};
+	double err_n_min = pow(base, exp);
 	int n = 0;
 	double pi_r = 0.0;
 
