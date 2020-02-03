@@ -21,6 +21,8 @@ e3_omp_dbg = $(e3)-$(omp)-$(dbg)
 e3_omp = $(e3)-$(omp)
 e3_dbg = $(e3)-$(dbg)
 
+all: e1_omp_dbg e1_omp e1_dbg e1 e2_omp_dbg e2_omp e2_dbg e2 e3_omp_dbg e3_omp e3_dbg e3
+
 e1_omp_dbg:
 	gcc -g -fopenmp $(e1.c) -o prace-pi.$(e1_omp_dbg) -lm
 e1_omp:
@@ -47,8 +49,6 @@ e3_dbg:
 	gcc -g $(e3.c) -o prace-pi.$(e3_dbg) -lm
 e3:
 	gcc $(e3.c) -o prace-pi.$(e3) -lm
-
-all: e1_omp_dbg e1_omp e1_dbg e1 e2_omp_dbg e2_omp e2_dbg e2 e3_omp_dbg e3_omp e3_dbg e3
 
 clean:
 	rm prace*
