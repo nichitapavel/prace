@@ -22,7 +22,7 @@ int main(const int argc, const char** argv) {
 	int n_list[N_ARRAY] = {1, 2, 10, 50, 100, 500};
 	for (int i = 0; i < N_ARRAY; ++i) {
 		double pi_r = pi(n_list[i]);
-		printf("[N: %d] - [pi_N: %.16lf] - [err(pi): %.16lf]\n", n_list[i], pi_r, pi_r - M_PI);
+		printf("[N: %d] - [pi(N): %.16lf] - [err(pi): %.16lf]\n", n_list[i], pi_r, pi_r - M_PI);
 	}
 	return 0;
 }
