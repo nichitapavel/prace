@@ -15,8 +15,8 @@ double pi(int n) {
 	double pi = 0.0;
 
 	#pragma omp parallel for reduction (+ : pi)
-	for (int i = 1; i <= n; ++i) {
-		pi += pi_n(n, i);
+	for (int i = 0; i < n; i++) {
+		pi += pi_n(n, i+1);
 	}
 	return 4.0 / n * pi;
 }
@@ -90,7 +90,7 @@ int main(const int argc, char** const argv) {
 	end = clock();
 
 	printf(
-			"[N: %d] - [pi(N): %.16lf] - [err(pi): %.16lf] - [time in sec: %.6f]\n",
+			"[N: %d] - [pi(N): %.50lf] - [err(pi): %.50lf] - [time in sec: %.6f]\n",
 			n, pi_r, pi_r - M_PI, (float) (end - start)/CLOCKS_PER_SEC
 			);
 	return 0;
